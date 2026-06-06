@@ -1,7 +1,7 @@
 # --- Stage 1: Build ứng dụng Leptos bằng Trunk ---
 FROM rust:slim AS builder
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libssl-dev pkg-config git openssl curl
+RUN apt-get update && apt-get install -y libssl-dev pkg-config git openssl curl
 RUN rustup toolchain install nightly
 RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
@@ -16,7 +16,7 @@ COPY . .
 RUN trunk build --release
 
 # --- Stage 2: Dùng Caddy để phục vụ file tĩnh ---
-FROM caddy:latest-alpine
+FROM caddy:2-alpine
 
 # Copy file từ stage 1 sang stage 2
 COPY --from=builder /app/dist /usr/share/caddy
